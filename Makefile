@@ -12,5 +12,15 @@ chacha20_demo.o:  chacha20_demo.c chacha20.h
 chacha20_demo:    chacha20_demo.o chacha20.o
 	$(CC) $(CFLAGS) chacha20_demo.o chacha20.o -o chacha20_demo
 
+poly1305.o: poly1305.c poly1305.h
+	$(CC) $(CFLAGS) poly1305.c -c
+
+poly1305_demo.o: poly1305_demo.c poly1305.h
+	$(CC) $(CFLAGS) poly1305_demo.c -c
+
+poly1305_demo: poly1305_demo.o poly1305.o
+	$(CC) $(CFLAGS) -lgmp  poly1305_demo.o poly1305.o -o poly1305_demo
+
+
 clean:
-	rm *.o chacha20_demo
+	rm -f *.o chacha20_demo poly1305_demo
