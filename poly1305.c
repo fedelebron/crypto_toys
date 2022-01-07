@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <gmp.h>
 
 void poly1305_clamp(unsigned char r[16]) {
   r[3] &= 15;
@@ -15,6 +16,15 @@ void poly1305_clamp(unsigned char r[16]) {
 
 void poly1305_mac(unsigned char key[32], char* plaintext,
                   size_t plaintext_length, unsigned char tag[16]) {
+  // The gist of this function is computing:
+  // a = s + \sum_{i=0}^{n-1} b_i * r^{n - i}
+  // where b_i is 2^(8 * j) times the i'th 16-byte block of plaintext, and j is
+  // the length in bytes of that 16-byte block, which can be less than 16 for
+  // the last block, which may need to be zero-padded. The blocks are read
+  // as little-endian 16-byte words.
+  // Here (r, s) = key, where we ensure some properties about r just in case,
+  // via clamping.
+
   memset(tag, 0, 16);
   mpz_t r, s;
   mpz_inits(r, s, NULL);
@@ -23,8 +33,6 @@ void poly1305_mac(unsigned char key[32], char* plaintext,
   poly1305_clamp(key); 
   mpz_import(r, 1, 1, 16, -1, 0, key); 
   mpz_import(s, 1, 1, 16, -1, 0, key + 16); 
-
-  gmp_printf("r = %Zx\ns = %Zx\n", r, s);
 
   // The RFC has a typo and calls this `accumulator` here, and
   // nowhere else.
@@ -38,7 +46,6 @@ void poly1305_mac(unsigned char key[32], char* plaintext,
   mpz_mul_2exp(p, one, 130);
   mpz_sub_ui(p, p, 5);
 
-  gmp_printf("p = %Zd\n", p);
 
   mpz_t n, nadd;
   mpz_inits(n, nadd, NULL);
@@ -50,20 +57,17 @@ void poly1305_mac(unsigned char key[32], char* plaintext,
 
     mpz_import(n, 1, 1, j, -1, 0, plaintext + i); 
 
-    // We must add 2^(8 * j) to n.
+    // We must add 2^(8 * j) to n, before adding n to a.
     mpz_mul_2exp(nadd, one, 8 * j);
     mpz_add(a, a, nadd);
 
+    // a := ((a + n) * r) % p .
     mpz_add(a, a, n);
     mpz_mul(a, a, r);
     mpz_mod(a, a, p);
-
-    printf("A block of %d bytes.\n", j);
-    gmp_printf("  It has n = %Zx.\n  After, a = %Zx.\n", n, a);
   }
 
   mpz_add(a, a, s);
-  gmp_printf("The final accumulator is %Zx.\n", a);
 
   mpz_export(tag, NULL, -1, 1, 0, 0, a);
  
