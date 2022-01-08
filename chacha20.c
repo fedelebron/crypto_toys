@@ -8,18 +8,18 @@ void chacha20_init_state(struct chacha20_context* ctx, uint32_t key[8],
                          uint32_t nonce[3], uint32_t counter) {
   
   uint32_t* state = ctx->state;
-  state[0] = 0x61707865; // ChaCha20 constants
-  state[1] = 0x3320646e;
-  state[2] = 0x79622d32;
-  state[3] = 0x6b206574;
+  state[CHACHA_CONST_0] = 0x61707865; // ChaCha20 constants
+  state[CHACHA_CONST_1] = 0x3320646e;
+  state[CHACHA_CONST_2] = 0x79622d32;
+  state[CHACHA_CONST_3] = 0x6b206574;
   
   for (int i = 0; i < 8; ++i) {
-    state[4 + i] = key[i];
+    state[CHACHA_KEY + i] = key[i];
   }
   
   state[12] = counter;
   for (int i = 0; i < 3; ++i) {
-    ctx->state[13 + i] = nonce[i];
+    ctx->state[CHACHA_NONCE + i] = nonce[i];
   }
 }
 
@@ -117,7 +117,7 @@ void chacha20_encrypt(struct chacha20_context* ctx, char* plaintext,
   while (bytes_remaining != 0) {
     // Generate keystream block, increment position for next loop
     chacha20_block(ctx, keystream);
-    ctx->state[12]++;
+    ctx->state[CHACHA_COUNTER]++;
     
     //                 min(bytes_remaining, 64)
     size_t xor_bytes = (bytes_remaining > 64 ? 64 : bytes_remaining);

@@ -9,6 +9,33 @@ struct chacha20_context {
   uint32_t state[16];
 };
 
+/* More helpful names for the offsets of the state */
+enum chacha_state_offset {
+	CHACHA_CONST   = 0,
+	CHACHA_CONST_0 = 0,
+	CHACHA_CONST_1 = 1,
+	CHACHA_CONST_2 = 2,
+	CHACHA_CONST_3 = 3,
+	
+	CHACHA_KEY   = 4,
+	CHACHA_KEY_0 = 4,
+	CHACHA_KEY_1 = 5,
+	CHACHA_KEY_2 = 6,
+	CHACHA_KEY_3 = 7,
+	CHACHA_KEY_4 = 8,
+	CHACHA_KEY_5 = 9,
+	CHACHA_KEY_6 = 10,
+	CHACHA_KEY_7 = 11,
+	
+	CHACHA_COUNTER = 12,
+	
+	CHACHA_NONCE   = 13,
+	CHACHA_NONCE_0 = 13,
+	CHACHA_NONCE_1 = 14,
+	CHACHA_NONCE_2 = 15
+};
+
+
 /* Initializes the state in a ChaCha20 context. The counter should be
    incremented for every block in the stream, while the nonce should be created
    anew once per stream. */
