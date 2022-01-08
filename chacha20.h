@@ -28,7 +28,7 @@ void chacha20_debug_block(const struct chacha20_context* ctx);
 
 /* Encrypts the plaintext, with length plaintext_length, into the ciphertext. 
    Doing so increments the counter for each block of keystream used. */
-void chacha20_encrypt(struct chacha20_context* ctx, const char* plaintext,
+void chacha20_encrypt(struct chacha20_context* ctx, char* plaintext,
                       size_t plaintext_length, char* ciphertext);
 
 

@@ -103,23 +103,29 @@ void chacha20_debug_state(const struct chacha20_context* ctx) {
   }
 }
 
-void chacha20_encrypt(struct chacha20_context* ctx, const char* plaintext,
+void chacha20_encrypt(struct chacha20_context* ctx, char* plaintext,
                       size_t plaintext_length, char* ciphertext) {
   
-  uint8_t keystream_buffer[64];
+  if (ciphertext == NULL) {
+    ciphertext = plaintext;
+  }
+  
+  uint8_t      keystream[64];
+  unsigned int text_offset = 0;
   
   size_t bytes_remaining = plaintext_length;
   while (bytes_remaining != 0) {
     // Generate keystream block, increment position for next loop
-    chacha20_block(ctx, keystream_buffer);
+    chacha20_block(ctx, keystream);
     ctx->state[12]++;
     
     //                 min(bytes_remaining, 64)
     size_t xor_bytes = (bytes_remaining > 64 ? 64 : bytes_remaining);
     for (int i = 0; i < xor_bytes; i++) {
-      *ciphertext++ = keystream_buffer[i] ^ *plaintext++;
+      ciphertext[text_offset + i] = keystream[i] ^ plaintext[text_offset + i];
     }
     
+	text_offset     += xor_bytes;
     bytes_remaining -= xor_bytes;
   }
 }
