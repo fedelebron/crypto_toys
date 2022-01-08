@@ -43,7 +43,7 @@ void chacha20_init_state(struct chacha20_context* ctx, uint32_t key[8],
                          uint32_t nonce[3], uint32_t counter);
 
 /* Runs the ChaCha20 algorithm to create a block of the keystream and writes
-   it to a destination buffer. */
+   it to a destination buffer. The block will be 64 bytes long. */
 void chacha20_block(const struct chacha20_context* ctx, uint8_t* dest);
 
 /* Prints a human-readable representation of the ChaCha20 state to stdout. */
@@ -53,11 +53,10 @@ void chacha20_debug_state(const struct chacha20_context* ctx);
    prints a human-readable representation of the block to stdout. */
 void chacha20_debug_block(const struct chacha20_context* ctx);
 
-/* Encrypts the plaintext, with length plaintext_length, into the ciphertext. 
-   If ciphertext == NULL, encryption of the plaintext is done in-place.
-   Doing so increments the counter for each block of keystream used. */
+/* Encrypts the plaintext, with length plaintext_length, in-place.
+   Doing so increments the ctx counter for each block of keystream used. */
 void chacha20_encrypt(struct chacha20_context* ctx, char* plaintext,
-                      size_t plaintext_length, char* ciphertext);
+                      size_t plaintext_length);
 
 
 

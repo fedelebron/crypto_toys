@@ -40,15 +40,14 @@ int main() {
                         "offer you only one tip for the future, sunscreen "
                         "would be it.";
   
-  char ciphertext[114];
-  chacha20_encrypt(&ctx, plaintext, 114, ciphertext);
+  chacha20_encrypt(&ctx, plaintext, 114);
   
   printf("Ciphertext:\n");
   for (int i = 0; i < 8; ++i) {
     for (int j = 0; j < 16; ++j) {
       int idx = 16 * i + j;
       if (idx >= 114) break;
-      printf("%02x ", (unsigned char)ciphertext[idx]);
+      printf("%02x ", (unsigned char)plaintext[idx]);
     }
     printf("\n");
   }
