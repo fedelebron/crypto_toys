@@ -14,8 +14,8 @@ void poly1305_clamp(unsigned char r[16]) {
   r[12] &= 252;
 }
 
-void poly1305_mac(unsigned char key[32], char* plaintext,
-                  size_t plaintext_length, unsigned char tag[16]) {
+void poly1305_mac(uint8_t key[32], char* plaintext,
+                  size_t plaintext_length, uint8_t tag[16]) {
   // The gist of this function is computing:
   // a = s + \sum_{i=0}^{n-1} b_i * r^{n - i}
   // where b_i is 2^(8 * j) times the i'th 16-byte block of plaintext, and j is
