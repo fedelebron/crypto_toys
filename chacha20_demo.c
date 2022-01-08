@@ -10,7 +10,7 @@ int main() {
   uint32_t nonce[3] = {0x9000000, 0x4a000000, 0x00000000};
   uint32_t count = 1;
   
-  char buffer[64];
+  uint8_t buffer[64];
   
   struct chacha20_context ctx;
   chacha20_init_state(&ctx, key, nonce, count);

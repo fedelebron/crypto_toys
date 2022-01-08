@@ -57,7 +57,7 @@ static void do_round(uint32_t state[16]) {
   do_quarter_round(state, 3, 4, 9,  14);
 }
 
-void chacha20_block(const struct chacha20_context* ctx, char* dest) {
+void chacha20_block(const struct chacha20_context* ctx, uint8_t* dest) {
   uint32_t working_state[16];
   memcpy(working_state, ctx->state, 16 * sizeof(uint32_t));
   
