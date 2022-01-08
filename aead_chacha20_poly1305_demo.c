@@ -32,5 +32,20 @@ int main() {
   }
   printf("\n");
 
+  int success = aead_chacha20_poly1305_decrypt(
+      key, nonce, plaintext, /*plaintext_length=*/114, additional_data,
+      /*additional_data_length=*/12, tag);
+
+  if (success != 0) {
+    fprintf(stderr, "Failed to authenticate encrypted message.\n");
+    return success;
+  }
+
+  printf("Authentication successful.\nDecrypted message:\n");
+  for (int i = 0; i < 114; ++i) {
+    printf("%c", plaintext[i]);
+  }
+  printf("\n");
+
   return 1;
 }
