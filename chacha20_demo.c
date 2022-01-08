@@ -3,7 +3,7 @@
 
 #include "chacha20.h"
 
-int main() {
+int main(void) {
   /* IVs from the RFC. */
   uint32_t key[8] = {0x03020100, 0x07060504, 0x0b0a0908, 0x0f0e0d0c,
                      0x13121110, 0x17161514, 0x1b1a1918, 0x1f1e1d1c};

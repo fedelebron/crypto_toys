@@ -1,3 +1,8 @@
+#ifndef POLY1305_H
+#define POLY1305_H
+#pragma once
+
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -7,3 +12,7 @@
 */
 void poly1305_mac(uint8_t key[32], char* plaintext,
                   size_t plaintext_length, uint8_t tag[16]);
+
+
+
+#endif /* POLY1305_H */

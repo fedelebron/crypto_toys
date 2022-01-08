@@ -1,3 +1,7 @@
+#ifndef AEAD_CHACHA20_POLY1305_H
+#define AEAD_CHACHA20_POLY1305_H
+#pragma once
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -18,3 +22,6 @@ int aead_chacha20_poly1305_decrypt(uint32_t key[8], uint32_t nonce[3],
                                    const char* additional_data,
                                    size_t additional_data_length,
                                    uint8_t tag[16]);
+
+
+#endif /* AEAD_CHACHA20_POLY1305_H */
