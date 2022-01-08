@@ -1,6 +1,6 @@
 #ifndef POLY1305_H
 #define POLY1305_H
-#pagman once
+#pragma once
 
 
 #include <stddef.h>
